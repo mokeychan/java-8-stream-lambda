@@ -25,12 +25,21 @@ public class Test1 {
     }
 
     @Test
-    public void lenStream() {
+    public void a() {
         List<String> list = Arrays.asList("java", "scala", "python", "shell", "ruby", "ruby");
+
+        // 随意选出一个元素/findFirst
+        // Optional是Java8新加入的一个容器，这个容器只存1个或0个元素，它用于防止出现NullpointException
+        Optional<String> str = list.parallelStream().findAny();
+        System.out.println(str.get());
+
+        System.out.println("\n");
         // 并行流
         // 筛选出字符长度小于5的个数
         long num = list.parallelStream().filter(x -> x.length() < 5).count();
         System.out.println(num);
+
+        System.out.println("\n");
         // 串行流
         // 去除重复的结果
         list = list.stream().distinct().collect(toList());
@@ -47,9 +56,10 @@ public class Test1 {
         list.forEach(System.out::println);
 
         System.out.println("\n");
-        // 是否匹配任意元素
+        // 是否匹配任意元素/anyMatch/noneMatch
         boolean flag = list.stream().anyMatch(x -> x.equals("python"));
         System.out.println(flag);
+
     }
 
     @Test
@@ -155,6 +165,8 @@ public class Test1 {
         Arrays.sort(players, (String s1, String s2) -> (s1.charAt(s1.length() - 1) - s2.charAt(s2.length() - 1)));
     }
 
+
+
     List<Person> javaProgrammers = new ArrayList<Person>() {
         {
             add(new Person("Elsdon", "Jaycob", "Java programmer", "male", 43, 2000));
@@ -185,6 +197,19 @@ public class Test1 {
         }
     };
 
+    /**
+     * 归约操作、映射操作
+     */
+    @Test
+    public void reduce() {
+        // 计算所有java程序员的年龄之和
+        Optional<Integer> javaTotalAge = javaProgrammers.stream().map(Person::getAge).reduce((x, y) -> x + y);
+        System.out.println(javaTotalAge.get());
+
+        // 2
+
+        // 映射mapToInt
+    }
 
     /**
      * 操作上述列表
