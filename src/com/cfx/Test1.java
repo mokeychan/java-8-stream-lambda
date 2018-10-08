@@ -46,6 +46,10 @@ public class Test1 {
         list = list.stream().skip(2).collect(toList());
         list.forEach(System.out::println);
 
+        System.out.println("\n");
+        // 是否匹配任意元素
+        boolean flag = list.stream().anyMatch(x -> x.equals("python"));
+        System.out.println(flag);
     }
 
     @Test
@@ -285,7 +289,7 @@ public class Test1 {
         System.out.println("将 PHP programmers 的 first name 拼接成字符串:");
         String phpDevelopers = phpProgrammers
                 .stream()
-                .map(Person::getFirstName)
+                .map(Person::getFirstName)  // 映射,意思是将Object转换成String
                 .collect(joining(" ; ")); // 在进一步的操作中可以作为标记(token)
         System.out.println(phpDevelopers);
 
