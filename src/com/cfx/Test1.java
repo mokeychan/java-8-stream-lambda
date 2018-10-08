@@ -6,6 +6,7 @@ import org.junit.Test;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.*;
 
@@ -15,46 +16,36 @@ import static java.util.stream.Collectors.*;
  * @Date: Created in 13:54 2018/10/8
  */
 public class Test1 {
-    /**
-     * 案例1： 求一个集合中字符串长度小于5的数量。
-     */
+
     @Test
-    public void lenIter() {
-        List<String> list = Arrays.asList("java", "scala", "python", "shell", "ruby");
-        int num = 0;
-        for(String lan: list) {
-            if(lan.length() < 5) {
-                num++;
-            }
-        }
-        System.out.println(num);
+    public void test() {
+        /*List<Person> personList = new ArrayList<>();
+        Stream<Person> personStream = personList.stream();
+        personStream.*/
     }
 
     @Test
     public void lenStream() {
-        List<String> list = Arrays.asList("java", "scala", "python", "shell", "ruby");
+        List<String> list = Arrays.asList("java", "scala", "python", "shell", "ruby", "ruby");
+        // 并行流
+        // 筛选出字符长度小于5的个数
         long num = list.parallelStream().filter(x -> x.length() < 5).count();
         System.out.println(num);
-    }
+        // 串行流
+        // 去除重复的结果
+        list = list.stream().distinct().collect(toList());
+        list.forEach(System.out::println);
 
-    @Test
-    public void a() {
-        String[] atp = {"Rafael Nadal", "Novak Djokovic",
-                "Stanislas Wawrinka",
-                "David Ferrer","Roger Federer",
-                "Andy Murray","Tomas Berdych",
-                "Juan Martin Del Potro"};
-        List<String> players = Arrays.asList(atp);
-        // 以前的循环方式
-        for (String player : players) {
-            System.out.print(player + "; ");
-        }
         System.out.println("\n");
-        // 使用 lambda 表达式以及函数操作(functional operation)
-        players.forEach((player) -> System.out.print(player + "; "));
+        // 截取流的前三个元素
+        list = list.stream().limit(3).collect(toList());
+        list.forEach(System.out::println);
+
         System.out.println("\n");
-        // 在 Java 8 中使用双冒号操作符(double colon operator)
-        players.forEach(System.out::println);
+        // 跳过流的前两个元素,若元素不足,则返回一个空流.
+        list = list.stream().skip(2).collect(toList());
+        list.forEach(System.out::println);
+
     }
 
     @Test
@@ -159,7 +150,6 @@ public class Test1 {
         // 3.3 or this
         Arrays.sort(players, (String s1, String s2) -> (s1.charAt(s1.length() - 1) - s2.charAt(s2.length() - 1)));
     }
-
 
     List<Person> javaProgrammers = new ArrayList<Person>() {
         {
@@ -297,24 +287,29 @@ public class Test1 {
                 .stream()
                 .map(Person::getFirstName)
                 .collect(joining(" ; ")); // 在进一步的操作中可以作为标记(token)
+        System.out.println(phpDevelopers);
 
         System.out.println("将 Java programmers 的 first name 存放到 Set:");
+
         Set<String> javaDevFirstName = javaProgrammers
                 .stream()
                 .map(Person::getFirstName)
                 .collect(toSet());
+        javaDevFirstName.forEach(System.out::println);
 
         System.out.println("将 Java programmers 的 first name 存放到 TreeSet:");
         TreeSet<String> javaDevLastName = javaProgrammers
                 .stream()
                 .map(Person::getLastName)
                 .collect(toCollection(TreeSet::new));
+        javaDevLastName.forEach(System.out::println);
 
         System.out.println("计算付给 Java programmers 的所有money:");
         int totalSalary = javaProgrammers
                 .parallelStream()
                 .mapToInt(p -> p.getSalary())
                 .sum();
+        System.out.println(totalSalary);
     }
 
     @Test
