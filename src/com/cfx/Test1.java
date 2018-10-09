@@ -6,7 +6,6 @@ import org.junit.Test;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.*;
 
@@ -75,6 +74,7 @@ public class Test1 {
         // 1.2使用 lambda expression
         new Thread(() -> System.out.println("Hello world !")).start();
 
+
         // 2.1使用匿名内部类
         Runnable race1 = new Runnable() {
             @Override
@@ -91,6 +91,9 @@ public class Test1 {
         race2.run();
     }
 
+    /**
+     * 排序
+     */
     @Test
     public void c() {
         String[] players = {"Rafael Nadal", "Novak Djokovic",
@@ -110,6 +113,7 @@ public class Test1 {
         // 1.2 使用 lambda expression 排序 players
         Comparator<String> sortByName = (String s1, String s2) -> (s1.compareTo(s2));
         Arrays.sort(players, sortByName);
+
 
         // 1.3 也可以采用如下形式:
         Arrays.sort(players, (String s1, String s2) -> (s1.compareTo(s2)));
@@ -203,12 +207,14 @@ public class Test1 {
     @Test
     public void reduce() {
         // 计算所有java程序员的年龄之和
-        Optional<Integer> javaTotalAge = javaProgrammers.stream().map(Person::getAge).reduce((x, y) -> x + y);
-        System.out.println(javaTotalAge.get());
-
-        // 2
+        // reduce--将流中元素反复结合起来
+        Optional<Integer> javaTotalAge1 = javaProgrammers.stream().map(Person::getAge).reduce((x, y) -> x + y);
+        System.out.println(javaTotalAge1.get());
 
         // 映射mapToInt
+        // sum / min/ max
+        int javaTotalAge2 = javaProgrammers.stream().mapToInt(Person::getAge).sum();
+        System.out.println(javaTotalAge2);
     }
 
     /**
@@ -309,8 +315,18 @@ public class Test1 {
         System.out.printf("Name: %s %s; Salary: $%,d.", person.getFirstName(), person.getLastName(), person.getSalary());
     }
 
+    /**
+     * collect 用法 , 聚合操作(分组、拼接、统计)
+     */
     @Test
     public void h() {
+        System.out.println("将 Java 程序员按照性别分组");
+        // java程序员按照性别分组统计
+        Map<String, List<String>> javaDevGender = javaProgrammers
+                .stream().collect(groupingBy(Person::getGender, mapping(Person::getFirstName, toList())));
+        System.out.println(javaDevGender);
+
+
         System.out.println("将 PHP programmers 的 first name 拼接成字符串:");
         String phpDevelopers = phpProgrammers
                 .stream()
@@ -348,7 +364,7 @@ public class Test1 {
         IntSummaryStatistics stats = numbers
                 .stream()
                 .mapToInt((x) -> x)
-                .summaryStatistics();
+                .summaryStatistics(); // 获得统计信息
 
         System.out.println("List中最大的数字 : " + stats.getMax());
         System.out.println("List中最小的数字 : " + stats.getMin());
