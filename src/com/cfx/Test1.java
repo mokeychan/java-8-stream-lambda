@@ -326,7 +326,6 @@ public class Test1 {
                 .stream().collect(groupingBy(Person::getGender, mapping(Person::getFirstName, toList())));
         System.out.println(javaDevGender);
 
-
         System.out.println("将 PHP programmers 的 first name 拼接成字符串:");
         String phpDevelopers = phpProgrammers
                 .stream()
